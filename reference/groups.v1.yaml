@@ -1,0 +1,140 @@
+openapi: 3.0.0
+info:
+  title: groups
+  version: '1.0'
+servers:
+  - url: 'http://fsl.svod.app/groups'
+paths:
+  /insert:
+    post:
+      summary: Create New Group
+      operationId: post-insert
+      responses:
+        '201':
+          description: Created
+        '304':
+          description: Not Modified
+        '422':
+          description: Unprocessable Entity (WebDAV)
+      tags:
+        - API
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+              required:
+                - name
+  '/show/{groupID}':
+    parameters:
+      - schema:
+          type: string
+        name: groupID
+        in: path
+        required: true
+    get:
+      summary: Show Group Data
+      tags:
+        - API
+      responses:
+        '200':
+          description: OK
+      operationId: get-show-groupID
+      description: ''
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+  '/delete/{groupID}':
+    parameters:
+      - schema:
+          type: string
+        name: groupID
+        in: path
+        required: true
+    delete:
+      summary: Delete Group
+      operationId: delete-delete-groupID
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+      tags:
+        - API
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+  /update:
+    post:
+      summary: Update Group Data
+      operationId: post-update
+      responses:
+        '200':
+          description: OK
+        '304':
+          description: Not Modified
+        '401':
+          description: Unauthorized
+        '422':
+          description: Unprocessable Entity (WebDAV)
+      tags:
+        - API
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                groupID:
+                  type: string
+                name:
+                  type: string
+                description:
+                  type: string
+              required:
+                - groupID
+                - name
+components:
+  schemas:
+    Group:
+      title: Group
+      type: object
+      x-tags:
+        - Model
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
