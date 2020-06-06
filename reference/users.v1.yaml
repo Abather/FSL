@@ -1,0 +1,227 @@
+openapi: 3.0.0
+info:
+  title: users
+  version: '1.0'
+  description: ''
+servers:
+  - url: 'http://fsl.svod.app/users'
+paths:
+  /register:
+    post:
+      summary: Signup
+      operationId: post-register
+      responses:
+        '201':
+          description: Created
+        '304':
+          description: Not Modified
+        '422':
+          description: Unprocessable Entity (WebDAV)
+      tags:
+        - API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                phoneNumber:
+                  type: string
+                nickname:
+                  type: string
+                password:
+                  type: string
+                avatar:
+                  type: string
+              required:
+                - name
+                - phoneNumber
+                - nickname
+                - password
+  /login:
+    post:
+      summary: Log In
+      operationId: post-login
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Unauthorized
+        '422':
+          description: Unprocessable Entity (WebDAV)
+        '500':
+          description: Internal Server Error
+      tags:
+        - API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumber:
+                  type: string
+                password:
+                  type: string
+                device:
+                  type: string
+              required:
+                - phoneNumber
+                - password
+                - device
+  '/killSession/{tokenID}':
+    parameters:
+      - schema:
+          type: string
+        name: tokenID
+        in: path
+        required: true
+    delete:
+      summary: Kill Session By ID
+      operationId: delete-killSession-tokenID
+      responses:
+        '200':
+          description: OK
+        '304':
+          description: Not Modified
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+      tags:
+        - API
+  /userGroups:
+    get:
+      summary: Get User Groups
+      tags:
+        - API
+      responses:
+        '200':
+          description: OK
+      operationId: get-userGroups
+      description: ''
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+  '/add/{userID}/to/{groupID}/as/{role}':
+    parameters:
+      - schema:
+          type: string
+        name: userID
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: groupID
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: role
+        in: path
+        required: true
+    post:
+      summary: Invite User To Group
+      operationId: post-add-userID-to-groupID-as-role
+      responses:
+        '200':
+          description: OK
+        '304':
+          description: Not Modified
+        '401':
+          description: Unauthorized
+      tags:
+        - API
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+  '/activate/{groupID}':
+    parameters:
+      - schema:
+          type: string
+        name: groupID
+        in: path
+        required: true
+    post:
+      summary: Accept Group Invitation
+      operationId: post-activate-groupID
+      responses:
+        '200':
+          description: OK
+      tags:
+        - API
+      description: ''
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+  /invitations:
+    get:
+      summary: Get User Invitations
+      tags:
+        - API
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+      operationId: get-invitations
+      parameters:
+        - schema:
+            type: string
+          in: header
+          name: Authorization
+          required: true
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      properties:
+        id:
+          type: integer
+        nickname:
+          type: string
+        name:
+          type: string
+        phoneNumber:
+          type: string
+        telegramID:
+          type: string
+        avatar:
+          type: string
+        isAdmin:
+          type: boolean
+        password:
+          type: string
+        phone_verified_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+      required:
+        - id
+        - nickname
+        - name
+        - phoneNumber
+        - isAdmin
+        - password
